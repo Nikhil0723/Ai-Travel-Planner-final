@@ -1,17 +1,16 @@
 import { Button } from '@/components/ui/button';
 import { db } from '@/Service/Firebase';
 import { doc, getDoc } from 'firebase/firestore';
-import React, { useContext, useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import toast from 'react-hot-toast';
 import { useParams } from 'react-router-dom'
 import Locationinfo from '../Elements/Locationinfo';
 import Hotels from '../Elements/Hotels';
-import { LogInContext } from '@/Context/LogInContext/Login';
 import Places from '../Elements/Places';
 
 function Mytrips() {
   const { tripId } = useParams();
-  const { setTrip} = useContext(LogInContext);
+  const [trip, setTrip] = useState(null);
   
   const getTripData = async () => {
     const docRef = doc(db, 'Trips', tripId);
@@ -29,14 +28,17 @@ function Mytrips() {
     tripId && getTripData();
   }, [tripId]);
   
+  if (!trip) {
+    return <div>Loading...</div>;
+  }
 
   return (
     <div className='py-2'>
-      <Locationinfo/>
-      <Hotels/>
-      <Places/>
+      <Locationinfo trip={trip} />
+      <Hotels trip={trip} />
+      <Places trip={trip} />
     </div>
   )
 }
 
-export default Mytrips
+export default Mytrips;

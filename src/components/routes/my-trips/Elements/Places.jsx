@@ -1,14 +1,41 @@
-import React from "react";
-import Placescard from "./Placescard";
+import React from 'react';
+import { Card, CardContent } from "@/components/ui/card";
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
+} from "@/components/ui/carousel";
 
-function Places() {
+function Places({ trip }) {
   return (
-    <div className="my-[15vh]">
-      <h2 className="opacity-90 mx-auto text-center text-3xl font-black text-primary/80 md:text-5xl">
-        Places
+    <div className="places my-10">
+      <h2 className="text-2xl md:text-4xl font-bold text-center mb-5 bg-gradient-to-b from-primary/90 to-primary/60 bg-clip-text text-transparent">
+        Places to Visit
       </h2>
-      <div className="main-info mt-2 md:mt-4">
-        <Placescard />
+      <div className="carousel w-full max-w-xs mx-auto">
+        <Carousel className="w-full">
+          <CarouselContent>
+            {trip?.tripData?.places?.map((place, index) => (
+              <CarouselItem key={index}>
+                <div className="p-1">
+                  <Card>
+                    <CardContent className="flex aspect-square items-center justify-center p-6">
+                      <div className="text-center">
+                        <h3 className="text-xl font-bold mb-2">{place.name}</h3>
+                        <p className="text-sm text-muted-foreground">{place.description}</p>
+                        <p className="text-sm font-medium mt-2">Time: {place.time}</p>
+                      </div>
+                    </CardContent>
+                  </Card>
+                </div>
+              </CarouselItem>
+            ))}
+          </CarouselContent>
+          <CarouselPrevious />
+          <CarouselNext />
+        </Carousel>
       </div>
     </div>
   );

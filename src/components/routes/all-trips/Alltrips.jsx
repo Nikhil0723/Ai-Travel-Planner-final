@@ -1,20 +1,14 @@
-import { LogInContext } from "@/Context/LogInContext/Login";
 import { db } from "@/Service/Firebase";
-import { collection, getDocs, query, where } from "firebase/firestore";
-import React, { useContext, useEffect, useState } from "react";
+import { collection, getDocs } from "firebase/firestore";
+import React, { useEffect, useState } from "react";
 import AlltripsCard from "./AlltripsCard";
 import { Link } from "react-router-dom";
 
 function Alltrips() {
-  const { user } = useContext(LogInContext);
   const [allTrips, setAllTrips] = useState([]);
 
   const getAllTrips = async () => {
-    const Query = query(
-      collection(db, "Trips"),
-      where("userEmail", "==", user?.email)
-    );
-    const querySnapshot = await getDocs(Query);
+    const querySnapshot = await getDocs(collection(db, "Trips"));
     const trips = [];
     querySnapshot.forEach((doc) => {
       trips.push(doc.data());
@@ -23,9 +17,10 @@ function Alltrips() {
     const reversedTrips = trips.reverse();
     setAllTrips(reversedTrips);
   };
+
   useEffect(() => {
     getAllTrips();
-  }, [user]);
+  }, []);
 
   return (
     <div className="mb-10">
